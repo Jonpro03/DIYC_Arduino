@@ -251,6 +251,7 @@ void organize(uint32_t trackLength, uint16_t eventPeriod, uint8_t numChannels, c
   char Read = 0;
   File hexFile, dataFile;
   uint32_t jump, Cursor = 0;
+  uint8_t bufferArray[numChannels];  
 
   strncpy(hexName, fileName, 8);
   strcat(hexName, ".hex");
@@ -276,22 +277,23 @@ void organize(uint32_t trackLength, uint16_t eventPeriod, uint8_t numChannels, c
     dataFile.close();
   }
 
-  Cursor = dataFile.position() - 1;
+   Cursor = dataFile.position() - 1;
 
-  for (int j = 0; j < jump; j++)
+for (int j = 0; j < jump; j++)
   {
     dataFile.seek(Cursor);
-    hexFile.write(dataFile.peek());
+    bufferArray[1] = dataFile.peek();
 
-    for (int i = 1; i < numChannels; i++)
+    for (int i = 2; i <= numChannels; i++)
     {
       Cursor += jump;
       dataFile.seek(Cursor);
-      hexFile.write(dataFile.peek());
+      bufferArray[i] = dataFile.peek();
     }
+	hexFile.write(bufferArray, numChannels);
+
     Cursor -= jump * (numChannels - 1) - 1;
-	Serial.println(Cursor);
-  }
+	  }
   Serial.println(" Finished.");
   Serial.print(hexFile.size());
   Serial.println(" bytes written.");
