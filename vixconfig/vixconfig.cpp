@@ -287,7 +287,7 @@ for (int j = 0; j < jump; j++)
     dataFile.seek(Cursor);
     bufferArray[0] = dataFile.peek();
 
-    for (int i = 1; i <= numChannels; i++)
+    for (int i = 1; i < numChannels; i++)
     {
       Cursor += jump;
       dataFile.seek(Cursor);
