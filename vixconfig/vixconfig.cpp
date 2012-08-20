@@ -63,7 +63,7 @@ void vixconfig(char *fileName)
       if (searchArray[0] == 'i' && searchArray[1] == 'm' && searchArray[2] == 'e' && searchArray[3] == '>')
         flag = 1;
     }
-
+	//We've reached the end of the file and didn't find the string "ime>"
     if (flag == 0)
     {
       Serial.print("ERROR - ");
@@ -78,6 +78,7 @@ void vixconfig(char *fileName)
       Read = vixen.read();
       if (Read != '<')
       {
+      	//cast from characters to integers
         trackLength += Read - 48;
         trackLength *= 10;
       }
@@ -97,7 +98,7 @@ void vixconfig(char *fileName)
       if (searchArray[0] == 'n' && searchArray[1] == 'd' && searchArray[2] == 's' && searchArray[3] == '>')
         flag = 1;
     }
-
+	//We've reached the end of the file and didn't find the string "nds>"
     if (flag == 0)
     {
       Serial.print("ERROR - ");
@@ -114,6 +115,7 @@ void vixconfig(char *fileName)
 
       if (Read != '<')
       {
+      	//cast from characters to integers
         eventPeriod += Read - 48;
         eventPeriod *= 10;
       }
@@ -137,6 +139,7 @@ void vixconfig(char *fileName)
       if (searchArray[0] == '/' && searchArray[1] == 'C' && searchArray[2] == 'h' && searchArray[3] == 'a' && searchArray[4] == 'n' && searchArray[5] == 'n' && searchArray[6] == 'e' && searchArray[7] == 'l' && searchArray[8] == '>')
         numChannels += 1;
     }
+    //We've reached the end of the file and didn't find the string "/Channel>"
     if(numChannels == 0)
     {
       Serial.print("ERROR - ");
@@ -145,11 +148,11 @@ void vixconfig(char *fileName)
       return;
     }
     else
-      Serial.println(" Finsihed.");
+      Serial.println(" Finished.");
     vixen.close();
 
     //Math to figure b64loops
-    if(trackLength%eventPeriod != 0)
+    if(trackLength % eventPeriod != 0)
     {
       Serial.println("ERROR - REMAINDER");
       return;
@@ -282,9 +285,9 @@ void organize(uint32_t trackLength, uint16_t eventPeriod, uint8_t numChannels, c
 for (int j = 0; j < jump; j++)
   {
     dataFile.seek(Cursor);
-    bufferArray[1] = dataFile.peek();
+    bufferArray[0] = dataFile.peek();
 
-    for (int i = 2; i <= numChannels; i++)
+    for (int i = 1; i <= numChannels; i++)
     {
       Cursor += jump;
       dataFile.seek(Cursor);
